@@ -1,15 +1,21 @@
 import { Footer } from "@/components/custom/Footer";
 import { MainNavigation } from "@/components/custom/MainNavigation";
 import { NavigationBreadcrumbs } from "@/components/custom/NavigationBreadcrumbs";
-import { ContactsPage } from "@/components/pages/Contacts.page";
+import { PortfolioPage } from "@/components/pages/Portfolio.page";
 
-export default function ContactPage() {
+export default async function PortfolioCategoryPage({
+  params,
+}: {
+  params: Promise<{ category: string }>;
+}) {
+  const { category } = await params;
+
   return (
     <main className="container mx-auto">
       <MainNavigation />
       <NavigationBreadcrumbs />
 
-      <ContactsPage />
+      <PortfolioPage category={category} />
 
       <Footer />
     </main>

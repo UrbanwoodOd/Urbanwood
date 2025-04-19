@@ -11,7 +11,7 @@ export const FurnitureCard = ({
 }) => {
   return (
     <div className="group cursor-pointer">
-      <Card className="overflow-hidden transition-all duration-300 group-hover:scale-105 shadow-none border-none rounded-none">
+      <Card className="overflow-hidden transition-all duration-300 group-hover:scale-105 shadow-none border-none rounded-none bg-transparent">
         <div className="relative">
           <img
             src={imageUrl}
@@ -19,7 +19,7 @@ export const FurnitureCard = ({
             className="w-full h-auto filter grayscale transition-all duration-300 group-hover:grayscale-0"
           />
         </div>
-        <CardHeader className="py-2">
+        <CardHeader className="py-2 bg-transparent">
           <CardTitle className="text-center text-lg font-light">
             {title}
           </CardTitle>
@@ -29,7 +29,13 @@ export const FurnitureCard = ({
   );
 };
 
-const furnitureCategories = [
+type FurnitureCategory = {
+  title: string;
+  imageUrl: string;
+  altText: string;
+};
+
+const furnitureCategories: FurnitureCategory[] = [
   {
     title: "Кухни на заказ",
     imageUrl: "/categories/sofa.jpg",
@@ -47,10 +53,14 @@ const furnitureCategories = [
   },
 ];
 
-export const FurnitureCategoriesList = () => {
+export const FurnitureCategoriesList = ({
+  items,
+}: {
+  items?: FurnitureCategory[];
+}) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 px-4">
-      {furnitureCategories.map((category) => (
+      {(items ?? furnitureCategories).map((category) => (
         <FurnitureCard key={category.title} {...category} />
       ))}
     </div>

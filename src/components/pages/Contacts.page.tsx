@@ -1,13 +1,9 @@
 import { Footer } from "../custom/Footer";
-import { MainNavigation } from "../custom/MainNavigation";
-import { NavigationBreadcrumbs } from "../custom/NavigationBreadcrumbs";
 import { PlaceOnMap } from "../custom/PlaceOnMap";
 
 export const ContactsPage = () => {
   return (
     <>
-      <MainNavigation />
-      <NavigationBreadcrumbs />
       <section className="container mx-auto py-8 px-8">
         <h2 className="text-2xl font-bold mb-6">Контакты</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

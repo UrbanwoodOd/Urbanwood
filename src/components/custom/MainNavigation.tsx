@@ -1,9 +1,82 @@
 "use client";
+
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+
+export const PortfolioDropdown = ({
+  currentPath,
+  activeClassname,
+  inactiveClassname,
+}: {
+  currentPath: string;
+  activeClassname: string;
+  inactiveClassname: string;
+}) => {
+  const [isDropdownHovered, setIsDropdownHovered] = useState(false);
+  const [isTriggerHovered, setIsTriggerHovered] = useState(false);
+  const [isListOpen, setIsListOpen] = useState(false);
+
+  useEffect(() => {
+    if (isTriggerHovered || isDropdownHovered) {
+      setIsListOpen(true);
+    } else if (!isTriggerHovered && !isDropdownHovered && isListOpen) {
+      const timer = setTimeout(() => {
+        setIsListOpen(false);
+      }, 300);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [isTriggerHovered, isDropdownHovered, isListOpen]);
+
+  return (
+    <DropdownMenu open={isListOpen} onOpenChange={setIsListOpen}>
+      <DropdownMenuTrigger asChild>
+        <li
+          onMouseEnter={() => setIsTriggerHovered(true)}
+          onMouseLeave={() => setIsTriggerHovered(false)}
+          className={cn(
+            currentPath === "/portfolio" ? activeClassname : inactiveClassname,
+            isListOpen &&
+              "bg-[#373737] hover:bg-[#373737] text-primary-foreground",
+          )}
+        >
+          <span className="flex items-center">Портфолио</span>
+        </li>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        className="shadow-xl"
+        side="bottom"
+        align="start"
+        onMouseEnter={() => setIsDropdownHovered(true)}
+        onMouseLeave={() => setIsDropdownHovered(false)}
+      >
+        <DropdownMenuItem>
+          <Link href="/portfolio/entrance">Прихожие</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="/portfolio/bedroom">Спальни</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="/portfolio/loft">Мебель Loft</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="/portfolio/wardrobe">Шкафы</Link>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 export const MainNavigation = () => {
   const currentPath = usePathname();
@@ -34,48 +107,49 @@ export const MainNavigation = () => {
     "h-full text-primary hover:text-primary-foreground flex items-center justify-center px-5 hover:bg-primary transition-colors";
 
   return (
-    <nav
+    <div
       className={cn(
-        "flex items-center justify-between py-0",
+        "bg-white flex items-center justify-between py-0",
         isScrolled
-          ? "fixed top-0 left-0 right-0 bg-white shadow-md z-50 animate-slideDown lg:px-[100px]"
+          ? "fixed top-0 left-0 right-0 shadow-md z-50 animate-slideDown"
           : "relative",
       )}
     >
-      <Image
-        src="/logo_full.jpg"
-        alt="logo"
-        className="ml-6"
-        width={isScrolled ? 200 : 288}
-        height={isScrolled ? 70 : 100}
-      />
-      <ul
-        className={`flex gap-0.5 items-center font-semibold ${
-          isScrolled ? "h-16" : "h-20"
-        }`}
-      >
-        <li
-          className={`${
-            currentPath === "/" ? activeClassname : inactiveClassname
+      <nav className="container w-full mx-auto flex items-center justify-between">
+        <Image
+          src="/logo_full.jpg"
+          alt="logo"
+          className="ml-6"
+          width={isScrolled ? 200 : 288}
+          height={isScrolled ? 70 : 100}
+        />
+        <ul
+          className={`flex gap-0.5 items-center font-semibold ${
+            isScrolled ? "h-16" : "h-20"
           }`}
         >
-          <Link href="/">Главная</Link>
-        </li>
-        <li
-          className={`${
-            currentPath === "/about" ? activeClassname : inactiveClassname
-          }`}
-        >
-          <Link href="/about">Портфолио</Link>
-        </li>
-        <li
-          className={`${
-            currentPath === "/contact" ? activeClassname : inactiveClassname
-          }`}
-        >
-          <Link href="/contact">Контакты</Link>
-        </li>
-      </ul>
-    </nav>
+          <li
+            className={`${
+              currentPath === "/" ? activeClassname : inactiveClassname
+            }`}
+          >
+            <Link href="/">Главная</Link>
+          </li>
+
+          <PortfolioDropdown
+            currentPath={currentPath}
+            activeClassname={activeClassname}
+            inactiveClassname={inactiveClassname}
+          />
+          <li
+            className={`${
+              currentPath === "/contact" ? activeClassname : inactiveClassname
+            }`}
+          >
+            <Link href="/contact">Контакты</Link>
+          </li>
+        </ul>
+      </nav>
+    </div>
   );
 };
