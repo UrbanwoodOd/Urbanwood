@@ -1,9 +1,10 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { createClient } from "@/supabase/supabase";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   DropdownMenu,
@@ -106,6 +107,25 @@ export const MainNavigation = () => {
   const inactiveClassname =
     "h-full text-primary hover:text-primary-foreground flex items-center justify-center px-5 hover:bg-primary transition-colors";
 
+  const [user, setUser] = useState<any>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const supabase = createClient();
+      const { data } = await supabase.auth.getSession();
+      setUser(data.session?.user || null);
+    };
+
+    getUser();
+  }, []);
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.refresh();
+  };
+
   return (
     <div
       className={cn(
@@ -119,7 +139,8 @@ export const MainNavigation = () => {
         <Image
           src="/logo_full.jpg"
           alt="logo"
-          className="ml-6"
+          className="ml-6 cursor-pointer"
+          onClick={() => router.push("/")}
           width={isScrolled ? 200 : 288}
           height={isScrolled ? 70 : 100}
         />
@@ -148,6 +169,15 @@ export const MainNavigation = () => {
           >
             <Link href="/contact">Контакты</Link>
           </li>
+          {user && user.email === "vadimkbondarchuk@gmail.com" ? (
+            <li
+              className={`${
+                currentPath === "/admin" ? activeClassname : inactiveClassname
+              }`}
+            >
+              <Link href="/admin">Админ</Link>
+            </li>
+          ) : null}
         </ul>
       </nav>
     </div>

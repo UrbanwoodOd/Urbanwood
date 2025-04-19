@@ -3,8 +3,16 @@ import { FurnitureCategoriesList } from "@/components/custom/FurnitureCategories
 import { MainGalleryCarousel } from "@/components/custom/MainGalleryCarousel";
 import { MainNavigation } from "@/components/custom/MainNavigation";
 import { NavigationBreadcrumbs } from "@/components/custom/NavigationBreadcrumbs";
+import { createClient } from "@/supabase/server";
+import { cookies } from "next/headers";
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+
+  const { data: users } = await supabase.from("users").select("*");
+  console.log(users);
+
   return (
     <main className="container mx-auto">
       <MainNavigation />
