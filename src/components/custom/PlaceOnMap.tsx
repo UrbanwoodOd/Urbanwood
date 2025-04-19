@@ -62,8 +62,8 @@ export const PlaceOnMap = ({ center, zoom = 14 }: PlaceOnMapProps) => {
   }, [center, mapLoaded]);
 
   return (
-    <section className="container mx-auto py-12 px-4">
-      <h2 className="text-2xl font-semibold mb-6">Location</h2>
+    <section className="container mx-auto py-12 px-8">
+      <h2 className="text-2xl font-semibold mb-6">Местоположение на карте</h2>
       <div
         ref={mapContainer}
         className="w-full h-[400px] rounded-md overflow-hidden border border-gray-200 shadow-sm"

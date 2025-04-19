@@ -9,26 +9,27 @@ export const ContactsPage = () => {
       <MainNavigation />
       <NavigationBreadcrumbs />
       <section className="container mx-auto py-8 px-8">
-        <h2 className="text-2xl font-bold mb-6">Contacts</h2>
+        <h2 className="text-2xl font-bold mb-6">Контакты</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold">Contact Us</h3>
-              <p className="text-gray-700">
-                Phone: +38 (067) 557-81-96 (Viber, Whatsapp, Telegram)
+              <h3 className="text-lg font-semibold">Свяжитесь с нами</h3>
+              <p className="text-primary">
+                Телефон: +38 (067) 557-81-96 (Viber, Whatsapp, Telegram)
               </p>
-              <p className="text-gray-700">Email: info@urbanwood.com.ua</p>
+              <p className="text-primary">Email: info@urbanwood.com.ua</p>
             </div>
           </div>
           <div>
             <div>
-              <h3 className="text-lg font-semibold">Address</h3>
-              <p className="text-gray-700">Odessa</p>
+              <h3 className="text-lg font-semibold">Адрес</h3>
+              <p className="text-primary">Одесса, Онежская 3</p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold">Working Hours</h3>
-              <p className="text-gray-700">Mon-Fri: 9:00-18:00</p>
-              <p className="text-gray-700">Sat-Sun: By appointment</p>
+              <h3 className="text-lg font-semibold">Рабочие часы</h3>
+              <p className="text-primary">
+                Пн-Вс: 10:00-18:00, по предварительной записи
+              </p>
             </div>
           </div>
         </div>

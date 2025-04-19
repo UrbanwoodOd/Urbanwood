@@ -13,6 +13,15 @@ const config: Config = {
   			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
   			'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
   		},
+  		animation: {
+  			'slideDown': 'slideDown 0.3s ease-in-out forwards',
+  		},
+  		keyframes: {
+  			slideDown: {
+  				'0%': { transform: 'translateY(-100%)' },
+  				'100%': { transform: 'translateY(0)' },
+  			},
+  		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
