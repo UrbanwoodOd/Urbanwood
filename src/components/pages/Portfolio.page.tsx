@@ -56,12 +56,12 @@ export const PortfolioPage = ({ category }: { category?: string }) => {
   if (error || !categoryData) {
     return null;
   }
-  console.log(categoryData);
+
   return (
     <div className="p-8 pt-4">
       <h2 className="text-2xl font-semibold py-4">{categoryData.name}</h2>
 
-      {category && <CategoryItemsList category={category} />}
+      {category && <CategoryItemsList categoryId={categoryData._id} />}
 
       <div
         dangerouslySetInnerHTML={{ __html: categoryData.description ?? "" }}

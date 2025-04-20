@@ -2,6 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import { createClient } from "@/supabase/supabase";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -12,6 +14,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+
+interface Category {
+  _id: string;
+  name: string;
+  slug: string;
+}
 
 export const PortfolioDropdown = ({
   currentPath,
@@ -40,6 +48,16 @@ export const PortfolioDropdown = ({
     }
   }, [isTriggerHovered, isDropdownHovered, isListOpen]);
 
+  const { data: categories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      const response = await axios.get<{ categories: Category[] }>(
+        "/api/get-category",
+      );
+      return response.data.categories;
+    },
+  });
+
   return (
     <DropdownMenu open={isListOpen} onOpenChange={setIsListOpen}>
       <DropdownMenuTrigger asChild>
@@ -62,18 +80,11 @@ export const PortfolioDropdown = ({
         onMouseEnter={() => setIsDropdownHovered(true)}
         onMouseLeave={() => setIsDropdownHovered(false)}
       >
-        <DropdownMenuItem>
-          <Link href="/portfolio/entrance">Прихожие</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Link href="/portfolio/bedroom">Спальни</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Link href="/portfolio/loft">Мебель Loft</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Link href="/portfolio/wardrobe">Шкафы</Link>
-        </DropdownMenuItem>
+        {categories?.map((category) => (
+          <DropdownMenuItem key={category._id}>
+            <Link href={`/portfolio/${category.slug}`}>{category.name}</Link>
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

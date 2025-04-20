@@ -10,11 +10,13 @@ interface CategoryItem {
 }
 
 interface CategoryItemsListProps {
-  category: string;
+  categoryId: string;
 }
 
-const getCategoryItems = async (category: string) => {
-  const response = await axios.get(`/api/get-category/items/${category}`);
+const getCategoryItems = async (categoryId: string) => {
+  const response = await axios.get<{ items: CategoryItem[] }>(
+    `/api/get-category/items/${categoryId}`,
+  );
   return response.data;
 };
 
@@ -33,16 +35,14 @@ const CategoryItemCard = ({ item }: { item: CategoryItem }) => {
   );
 };
 
-export const CategoryItemsList = ({ category }: CategoryItemsListProps) => {
+export const CategoryItemsList = ({ categoryId }: CategoryItemsListProps) => {
   const { data } = useQuery({
-    queryKey: ["categoryItems", category],
-    queryFn: () => getCategoryItems(category),
+    queryKey: ["categoryItems", categoryId],
+    queryFn: () => getCategoryItems(categoryId),
   });
 
-  console.log(data);
-
   const { firstColumn, secondColumn, thirdColumn } = useMemo(() => {
-    if (!data?.categoryItems) {
+    if (!data?.items) {
       return { firstColumn: [], secondColumn: [], thirdColumn: [] };
     }
 
@@ -50,7 +50,7 @@ export const CategoryItemsList = ({ category }: CategoryItemsListProps) => {
     const second: CategoryItem[] = [];
     const third: CategoryItem[] = [];
 
-    data.categoryItems.forEach((item: CategoryItem, index: number) => {
+    data.items.forEach((item: CategoryItem, index: number) => {
       const columnIndex = index % 3;
       if (columnIndex === 0) {
         first.push(item);
