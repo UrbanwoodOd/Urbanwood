@@ -1,4 +1,3 @@
-import { Footer } from "../custom/Footer";
 import { PlaceOnMap } from "../custom/PlaceOnMap";
 
 export const ContactsPage = () => {
@@ -31,7 +30,6 @@ export const ContactsPage = () => {
         </div>
       </section>
       <PlaceOnMap center={[30.696091, 46.455461]} />
-      <Footer />
     </>
   );
 };
