@@ -1,8 +1,12 @@
-import { NextResponse } from "next/server";
-import { updateCategoryItem, getCategoryItemById, getImageById } from "@/db/queries";
-import { db } from "@/lib/db";
+import db from "@/db/db";
+import {
+  getCategoryItemById,
+  getImageById,
+  updateCategoryItem,
+} from "@/db/queries";
 import { categoryItems } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { NextResponse } from "next/server";
 
 export async function PUT(
   request: Request,
@@ -11,14 +15,11 @@ export async function PUT(
   try {
     const { id } = params;
     const numId = parseInt(id);
-    
+
     if (isNaN(numId)) {
-      return NextResponse.json(
-        { error: "Invalid ID format" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
     }
-    
+
     const body = await request.json();
     const { name, image_id, category } = body;
 
@@ -32,25 +33,24 @@ export async function PUT(
     // Find the image to get its publicUrl
     const image = await getImageById(parseInt(image_id));
     if (!image) {
-      return NextResponse.json(
-        { error: "Image not found" },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: "Image not found" }, { status: 404 });
     }
 
     // Create slug from name if not provided
-    const slug = body.slug || name
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^\w\-]+/g, "")
-      .replace(/\-\-+/g, "-")
-      .trim();
+    const slug =
+      body.slug ||
+      name
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w\-]+/g, "")
+        .replace(/\-\-+/g, "-")
+        .trim();
 
     // Update category item
     const updatedItem = await updateCategoryItem(numId, {
       name,
       slug,
-      categorySlug: category,
+      categoryId: parseInt(category),
       imageId: parseInt(image_id),
       imageUrl: image.publicUrl,
     });
@@ -82,12 +82,9 @@ export async function DELETE(
   try {
     const { id } = params;
     const numId = parseInt(id);
-    
+
     if (isNaN(numId)) {
-      return NextResponse.json(
-        { error: "Invalid ID format" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
     }
 
     // Check if item exists

@@ -6,9 +6,17 @@ import { Button } from "@/components/ui/button";
 import { locales } from "@/i18n/config";
 import { createClient } from "@/supabase/supabase";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
-export default function SignIn() {
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignIn />
+    </Suspense>
+  );
+}
+
+const SignIn = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("vadimkbondarchuk@gmail.com");
@@ -129,4 +137,4 @@ export default function SignIn() {
       <Footer />
     </main>
   );
-}
+};

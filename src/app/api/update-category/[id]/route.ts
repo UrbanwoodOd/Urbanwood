@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updateCategory, getCategoryById } from "@/db/queries";
-import { db } from "@/lib/db";
 import { categories } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import db from "@/db/db";
 
 export async function PUT(
   request: NextRequest,

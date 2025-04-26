@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import { getCategoryItems } from "@/db/queries";
+import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
@@ -8,7 +8,7 @@ export async function GET(
   try {
     const { category } = params;
 
-    const items = await getCategoryItems(category);
+    const items = await getCategoryItems(parseInt(category));
 
     return NextResponse.json({ items });
   } catch (error) {
