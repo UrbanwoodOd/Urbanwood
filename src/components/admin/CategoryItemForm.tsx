@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -17,6 +18,7 @@ export function CategoryItemForm({
   onComplete,
   categoryId,
 }: CategoryItemFormProps) {
+  console.log("categoryId", categoryId);
   const [name, setName] = useState(categoryItem?.name || "");
   const [imageId, setImageId] = useState(categoryItem?.image_id || "");
   const [imageUrl, setImageUrl] = useState(categoryItem?.image_url || "");
@@ -77,7 +79,6 @@ export function CategoryItemForm({
         throw new Error("Name is required");
       }
 
-      // Upload image if there's a file or use existing image
       let itemImageId = imageId;
       let itemImageUrl = imageUrl; // Used for both preview and fallback
 
@@ -93,33 +94,24 @@ export function CategoryItemForm({
       const apiUrl =
         mode === "add"
           ? "/api/post-category-item"
-          : `/api/update-category-item/${categoryItem._id}`;
+          : `/api/update-category-item/${categoryItem.id}`;
 
-      const method = mode === "add" ? "POST" : "PUT";
+      mode === "add"
+        ? await axios.post(apiUrl, {
+            name,
+            category: categoryId,
+            image_id: itemImageId,
+            image_url: itemImageUrl,
+            slug,
+          })
+        : await axios.put(apiUrl, {
+            name,
+            category: categoryId,
+            image_id: itemImageId,
+            image_url: itemImageUrl,
+            slug,
+          });
 
-      // Always include both image_id and image_url
-      const requestBody = {
-        name,
-        category: categoryId,
-        image_id: itemImageId,
-        image_url: itemImageUrl,
-        slug,
-      };
-
-      const response = await fetch(apiUrl, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to save category item");
-      }
-
-      // Success - go back to the list
       onComplete();
     } catch (error: any) {
       setError(error.message);
@@ -129,7 +121,7 @@ export function CategoryItemForm({
   };
 
   const handleDelete = async () => {
-    if (!categoryItem?._id) return;
+    if (!categoryItem?.id) return;
 
     if (!confirm("Are you sure you want to delete this item?")) {
       return;
@@ -138,7 +130,7 @@ export function CategoryItemForm({
     setLoading(true);
     try {
       const response = await fetch(
-        `/api/update-category-item/${categoryItem._id}`,
+        `/api/update-category-item/${categoryItem.id}`,
         {
           method: "DELETE",
         },

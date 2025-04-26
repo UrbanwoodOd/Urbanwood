@@ -1,26 +1,21 @@
-import { connectToDatabase } from "@/lib/mongodb";
-import { Category } from "@/models/Category";
-import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
+import { getCategoryById } from "@/db/queries";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
   try {
-    const id = params.id;
-
-    // Validate ID format
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    const id = parseInt(params.id);
+    
+    if (isNaN(id)) {
       return NextResponse.json(
         { error: "Invalid category ID" },
         { status: 400 },
       );
     }
 
-    await connectToDatabase();
-
-    const category = await Category.findById(id);
+    const category = await getCategoryById(id);
 
     if (!category) {
       return NextResponse.json(

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useMemo } from "react";
 
 interface CategoryItem {
-  _id: string;
+  id: string;
   name: string;
   image_url: string;
   slug: string;
@@ -73,19 +73,19 @@ export const CategoryItemsList = ({ categoryId }: CategoryItemsListProps) => {
       <div className="flex flex-col gap-4">
         {firstColumn &&
           firstColumn.map((item: CategoryItem) => (
-            <CategoryItemCard key={item._id} item={item} />
+            <CategoryItemCard key={item.id} item={item} />
           ))}
       </div>
       <div className="flex flex-col gap-4">
         {secondColumn &&
           secondColumn.map((item: CategoryItem) => (
-            <CategoryItemCard key={item._id} item={item} />
+            <CategoryItemCard key={item.id} item={item} />
           ))}
       </div>
       <div className="flex flex-col gap-4">
         {thirdColumn &&
           thirdColumn.map((item: CategoryItem) => (
-            <CategoryItemCard key={item._id} item={item} />
+            <CategoryItemCard key={item.id} item={item} />
           ))}
       </div>
     </div>

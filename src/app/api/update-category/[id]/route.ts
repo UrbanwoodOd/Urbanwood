@@ -1,36 +1,29 @@
-import { connectToDatabase } from "@/lib/mongodb";
-import { Category } from "@/models/Category";
-import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
+import { updateCategory, getCategoryById } from "@/db/queries";
+import { db } from "@/lib/db";
+import { categories } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
   try {
-    const id = params.id;
+    const id = parseInt(params.id);
 
-    // Validate ID format
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (isNaN(id)) {
       return NextResponse.json(
         { error: "Invalid category ID" },
         { status: 400 },
       );
     }
 
-    await connectToDatabase();
-
     const data = await request.json();
-    const updatedCategory = await Category.findByIdAndUpdate(
-      id,
-      {
-        name: data.name,
-        slug: data.slug,
-        description: data.description,
-        imagePath: data.imagePath,
-      },
-      { new: true, runValidators: true },
-    );
+    const updatedCategory = await updateCategory(id, {
+      name: data.name,
+      slug: data.slug,
+      description: data.description,
+    });
 
     if (!updatedCategory) {
       return NextResponse.json(
@@ -54,26 +47,26 @@ export async function DELETE(
   { params }: { params: { id: string } },
 ) {
   try {
-    const id = params.id;
+    const id = parseInt(params.id);
 
-    // Validate ID format
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (isNaN(id)) {
       return NextResponse.json(
         { error: "Invalid category ID" },
         { status: 400 },
       );
     }
 
-    await connectToDatabase();
-
-    const deletedCategory = await Category.findByIdAndDelete(id);
-
-    if (!deletedCategory) {
+    // Check if category exists
+    const category = await getCategoryById(id);
+    if (!category) {
       return NextResponse.json(
         { error: "Category not found" },
         { status: 404 },
       );
     }
+
+    // Delete the category
+    await db.delete(categories).where(eq(categories.id, id));
 
     return NextResponse.json(
       { message: "Category deleted successfully" },

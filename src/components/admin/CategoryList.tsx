@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 
 interface Category {
-  _id: string;
+  id: string;
   name: string;
   slug: string;
   description?: string;
@@ -28,15 +28,15 @@ export function CategoryList({ onEdit, onManageItems }: CategoryListProps) {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/get-category');
+      const response = await fetch("/api/get-category");
       if (!response.ok) {
-        throw new Error('Failed to fetch categories');
+        throw new Error("Failed to fetch categories");
       }
       const data = await response.json();
       setCategories(data.categories || []);
     } catch (err) {
-      console.error('Error fetching categories:', err);
-      setError('Failed to load categories. Please try again.');
+      console.error("Error fetching categories:", err);
+      setError("Failed to load categories. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -47,24 +47,24 @@ export function CategoryList({ onEdit, onManageItems }: CategoryListProps) {
   }, []);
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Вы уверены, что хотите удалить эту категорию?')) {
+    if (!confirm("Вы уверены, что хотите удалить эту категорию?")) {
       return;
     }
 
     try {
       const response = await fetch(`/api/update-category/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete category');
+        throw new Error("Failed to delete category");
       }
 
       // Refresh the category list
       fetchCategories();
     } catch (err) {
-      console.error('Error deleting category:', err);
-      alert('Failed to delete category. Please try again.');
+      console.error("Error deleting category:", err);
+      alert("Failed to delete category. Please try again.");
     }
   };
 
@@ -80,7 +80,9 @@ export function CategoryList({ onEdit, onManageItems }: CategoryListProps) {
     return (
       <div className="p-4 bg-red-50 text-red-700 rounded-md">
         <p>{error}</p>
-        <Button variant="outline" className="mt-2" onClick={fetchCategories}>Попробовать снова</Button>
+        <Button variant="outline" className="mt-2" onClick={fetchCategories}>
+          Попробовать снова
+        </Button>
       </div>
     );
   }
@@ -97,7 +99,7 @@ export function CategoryList({ onEdit, onManageItems }: CategoryListProps) {
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {categories.map((category) => (
-          <Card key={category._id} className="p-4">
+          <Card key={category.id} className="p-4">
             <div className="flex justify-between">
               <div>
                 <h3 className="font-medium text-lg">{category.name}</h3>
@@ -111,33 +113,33 @@ export function CategoryList({ onEdit, onManageItems }: CategoryListProps) {
               </div>
               {category.imagePath && (
                 <div className="h-20 w-20 rounded-md overflow-hidden">
-                  <img 
-                    src={category.imagePath} 
-                    alt={category.name} 
+                  <img
+                    src={category.imagePath}
+                    alt={category.name}
                     className="h-full w-full object-cover"
                   />
                 </div>
               )}
             </div>
             <div className="flex gap-2 mt-4">
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => onEdit(category)}
               >
                 Изменить
               </Button>
-              <Button 
-                variant="default" 
-                size="sm" 
+              <Button
+                variant="default"
+                size="sm"
                 onClick={() => onManageItems(category)}
               >
                 Элементы
               </Button>
-              <Button 
-                variant="destructive" 
-                size="sm" 
-                onClick={() => handleDelete(category._id)}
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => handleDelete(category.id)}
               >
                 Удалить
               </Button>

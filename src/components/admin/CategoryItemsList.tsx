@@ -70,7 +70,7 @@ export function CategoryItemsList({
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {items.map((item) => (
         <div
-          key={item._id}
+          key={item.id}
           className="border rounded-md overflow-hidden shadow-sm hover:shadow-md transition-shadow"
         >
           <div className="relative w-full h-48">

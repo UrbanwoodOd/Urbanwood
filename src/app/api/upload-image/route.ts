@@ -1,7 +1,6 @@
 import { uploadFile } from "@/lib/minio";
-import { connectToDatabase } from "@/lib/mongodb";
-import { Image } from "@/models/Image";
 import { NextRequest, NextResponse } from "next/server";
+import { createImage } from "@/db/queries";
 
 const ALLOWED_MIME_TYPES = [
   "image/jpeg",
@@ -62,9 +61,8 @@ export async function POST(request: NextRequest) {
     // Upload file to MinIO
     const publicUrl = await uploadFile(buffer, fileName, file.type);
 
-    // Connect to MongoDB and save the image metadata
-    await connectToDatabase();
-    const imageDoc = new Image({
+    // Save the image metadata in PostgreSQL using DrizzleORM
+    const imageDoc = await createImage({
       filename: fileName,
       originalName: file.name,
       mimeType: file.type,
@@ -72,14 +70,13 @@ export async function POST(request: NextRequest) {
       publicUrl,
       category,
     });
-    await imageDoc.save();
 
     return NextResponse.json(
       {
         success: true,
         url: publicUrl,
         image: {
-          id: imageDoc._id,
+          id: imageDoc.id,
           filename: fileName,
           publicUrl,
         },

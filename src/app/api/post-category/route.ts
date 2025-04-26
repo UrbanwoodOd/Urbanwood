@@ -1,11 +1,8 @@
-import { connectToDatabase } from "@/lib/mongodb";
-import { Category } from "@/models/Category";
 import { NextRequest, NextResponse } from "next/server";
+import { createCategory, getCategoryBySlug } from "@/db/queries";
 
 export async function POST(request: NextRequest) {
   try {
-    await connectToDatabase();
-
     const data = await request.json();
 
     // Validate required fields
@@ -17,7 +14,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if category with same slug already exists
-    const existingCategory = await Category.findOne({ slug: data.slug });
+    const existingCategory = await getCategoryBySlug(data.slug);
     if (existingCategory) {
       return NextResponse.json(
         { error: "Category with this slug already exists" },
@@ -26,11 +23,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Create new category
-    const newCategory = await Category.create({
+    const newCategory = await createCategory({
       name: data.name,
       slug: data.slug,
       description: data.description || "",
-      image_url: data.image_url || "",
     });
 
     return NextResponse.json(

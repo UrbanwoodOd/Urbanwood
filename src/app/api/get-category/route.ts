@@ -1,16 +1,13 @@
-import { connectToDatabase } from "@/lib/mongodb";
-import { Category } from "@/models/Category";
 import { NextRequest, NextResponse } from "next/server";
+import { getAllCategories, getCategoryBySlug } from "@/db/queries";
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const slug = searchParams.get("slug");
 
-    await connectToDatabase();
-
     if (slug) {
-      const category = await Category.findOne({ slug });
+      const category = await getCategoryBySlug(slug);
 
       if (!category) {
         return NextResponse.json(
@@ -23,7 +20,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Otherwise return all categories
-    const categories = await Category.find({}).sort({ name: 1 });
+    const categories = await getAllCategories();
     return NextResponse.json({ categories });
   } catch (error) {
     console.error("Failed to get categories:", error);

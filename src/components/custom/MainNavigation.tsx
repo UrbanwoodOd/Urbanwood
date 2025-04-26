@@ -18,7 +18,7 @@ import {
 } from "../ui/dropdown-menu";
 
 interface Category {
-  _id: string;
+  id: string;
   name: string;
   slug: string;
 }
@@ -87,7 +87,7 @@ export const PortfolioDropdown = ({
         onMouseLeave={() => setIsDropdownHovered(false)}
       >
         {categories?.map((category) => (
-          <DropdownMenuItem key={category._id}>
+          <DropdownMenuItem key={category.id}>
             <Link href={`/${locale}/portfolio/${category.slug}`}>
               {category.name}
             </Link>

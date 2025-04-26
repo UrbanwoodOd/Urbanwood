@@ -126,7 +126,7 @@ export default function AdminPortfolioPage() {
               <Button onClick={handleAddItem}>{t("portfolio.addItem")}</Button>
             </div>
             <CategoryItemsList
-              categoryId={selectedCategory?._id}
+              categoryId={selectedCategory?.id}
               onEdit={handleEditItem}
             />
           </div>
@@ -138,7 +138,7 @@ export default function AdminPortfolioPage() {
             categoryItem={selectedItem}
             mode={activeView === "addItem" ? "add" : "edit"}
             onComplete={handleBackToItems}
-            categoryId={selectedCategory?._id}
+            categoryId={selectedCategory?.id}
           />
         );
       default:
