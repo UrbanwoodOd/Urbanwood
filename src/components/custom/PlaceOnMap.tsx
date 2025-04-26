@@ -1,6 +1,7 @@
 "use client";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
 interface PlaceOnMapProps {
@@ -12,6 +13,7 @@ export const PlaceOnMap = ({ center, zoom = 14 }: PlaceOnMapProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const t = useTranslations("map");
 
   useEffect(() => {
     if (!map.current && mapContainer.current) {
@@ -63,7 +65,7 @@ export const PlaceOnMap = ({ center, zoom = 14 }: PlaceOnMapProps) => {
 
   return (
     <section className="container mx-auto py-12 px-8">
-      <h2 className="text-2xl font-semibold mb-6">Местоположение на карте</h2>
+      <h2 className="text-2xl font-semibold mb-6">{t("title")}</h2>
       <div
         ref={mapContainer}
         className="w-full h-[400px] rounded-md overflow-hidden border border-gray-200 shadow-sm"

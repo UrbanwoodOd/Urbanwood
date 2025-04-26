@@ -1,0 +1,118 @@
+{
+  "navigation": {
+    "home": "Home",
+    "portfolio": "Portfolio",
+    "contact": "Contact Us"
+  },
+  "home": {
+    "title": "Urbanwood Furniture",
+    "subtitle": "Crafted with passion",
+    "description": "We create custom furniture that combines style, functionality, and quality",
+    "cta": "View Portfolio",
+    "paragraphs": {
+      "p1": {
+        "start": " from Urbanwood will solve the main challenges that arise during your search: matching furniture with interior design, convenience of use, quality, and value for money. Even with the variety in furniture stores today, it can be very difficult to find exactly what will perfectly fit your interior. By making ",
+        "furnitureInOdessa": "Custom furniture in Odessa",
+        "customFurniture": "custom furniture",
+        "end": ", all these tasks can be solved at the initial stage. We can take into account all the wishes and requirements of the future furniture owner, which will allow you to enjoy using the furniture in the future."
+      },
+      "p2": "We keep track of new products in the market of furniture components and materials for the production of custom furniture, and can offer both the newest and highest quality solutions, as well as proven ones.",
+      "p3": {
+        "start": "Urbanwood will help you on this challenging journey if you're looking for ",
+        "furnitureInOdessa": "custom furniture in Odessa",
+        "end": ". Comfortable furniture for kitchen, living room, bedroom, furniture for cafes (restaurants and bars), Loft furniture, plywood furniture - this is not a complete list of what we can offer you. Custom furniture manufacturing opens up unlimited possibilities for creativity. The combination of seemingly incompatible materials allows you to achieve that unique look that cannot be bought in a regular furniture store."
+      },
+      "p4": "Wooden furniture looks better due to its natural qualities and the uniqueness of the wood structure. After all, there are no two identical trees in nature. The use of metal allows for a strong frame. Plywood is a naturally enhanced material that is unique in its properties. It is stronger than wood but has the same natural pattern. The combination of seemingly incompatible materials allows you to achieve that unique look that cannot be bought in a regular furniture store. Metal with wood, plywood with MDF, various ways of processing these materials - from painting to wax coating.",
+      "p5": "We produce unique furniture with an individual approach to every detail. Therefore, each piece of furniture, as well as the price, is different. The price is discussed individually and depends on the quality of the materials you choose and the complexity of the work. Custom furniture in Odessa from Urbanwood is the right choice!"
+    }
+  },
+  "carousel": {
+    "slide1": "Design, planning and manufacturing of custom furniture",
+    "slide2": "Furniture for cafes, restaurants, bars",
+    "slide3": "Loft furniture for office or home"
+  },
+  "portfolio": {
+    "title": "Our Portfolio",
+    "subtitle": "Browse our collection",
+    "categories": "Categories",
+    "viewMore": "View More",
+    "backToCategories": "Back to Categories",
+    "moreDetails": "More Details"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "formName": "Your Name",
+    "formEmail": "Your Email",
+    "formMessage": "Your Message",
+    "formSubmit": "Send Message",
+    "formSuccess": "Message sent successfully!",
+    "formError": "Error sending message!",
+    "addressValue": "Odessa, Onezka 3",
+    "workingHours": "Working Hours",
+    "workingHoursValue": "Mon-Sun: 10:00-18:00, by appointment"
+  },
+  "footer": {
+    "copyright": "© Urbanwood Furniture. All rights reserved.",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "followUs": "Follow Us",
+    "popularFurniture": "Popular Furniture",
+    "customFurniture": "Custom Furniture in Odessa",
+    "loftFurniture": "Loft Style Furniture",
+    "customWardrobes": "Custom Wardrobes in Odessa",
+    "classicKitchens": "Classic Kitchens",
+    "tables": "Tables"
+  },
+  "map": {
+    "title": "Location on Map"
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "categories": "Categories",
+    "items": "Items",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "upload": "Upload",
+    "name": "Name",
+    "description": "Description",
+    "image": "Image",
+    "actions": "Actions",
+    "signOut": "Sign Out",
+    "adminInfo": "Admin Info",
+    "lastSignIn": "Last Sign In",
+    "websiteManagement": "Website Management",
+    "portfolioItems": {
+      "title": "Portfolio Items",
+      "description": "Manage portfolio items and categories"
+    },
+    "contentManagement": {
+      "title": "Content Management",
+      "description": "Edit website content and texts"
+    },
+    "contactManagement": {
+      "title": "Contact Management",
+      "description": "View and manage contact form submissions"
+    },
+    "portfolio": {
+      "title": "Portfolio Management",
+      "addCategory": "Add Category",
+      "addItem": "Add Item",
+      "editItem": "Edit Item",
+      "backToCategories": "Back to Categories",
+      "backToItems": "Back to Items",
+      "backToList": "Back to List",
+      "backToAdmin": "Back to Admin Panel",
+      "categoryItems": "Category Items",
+      "categoryItem": "Category Item",
+      "manage": "Manage"
+    }
+  }
+}

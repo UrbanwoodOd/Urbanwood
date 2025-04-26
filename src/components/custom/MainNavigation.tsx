@@ -1,9 +1,11 @@
 "use client";
 
+import { locales } from "@/i18n/config";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/supabase/supabase";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -33,6 +35,8 @@ export const PortfolioDropdown = ({
   const [isDropdownHovered, setIsDropdownHovered] = useState(false);
   const [isTriggerHovered, setIsTriggerHovered] = useState(false);
   const [isListOpen, setIsListOpen] = useState(false);
+  const t = useTranslations("navigation");
+  const locale = useLocale();
 
   useEffect(() => {
     if (isTriggerHovered || isDropdownHovered) {
@@ -65,12 +69,14 @@ export const PortfolioDropdown = ({
           onMouseEnter={() => setIsTriggerHovered(true)}
           onMouseLeave={() => setIsTriggerHovered(false)}
           className={cn(
-            currentPath === "/portfolio" ? activeClassname : inactiveClassname,
+            currentPath.includes("/portfolio")
+              ? activeClassname
+              : inactiveClassname,
             isListOpen &&
-              "bg-[#373737] hover:bg-[#373737] text-primary-foreground",
+              "bg-[#373737] hover:bg-[#373737] text-primary-foreground cursor-pointer",
           )}
         >
-          <span className="flex items-center">Портфолио</span>
+          <span className="flex items-center">{t("portfolio")}</span>
         </li>
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -82,7 +88,9 @@ export const PortfolioDropdown = ({
       >
         {categories?.map((category) => (
           <DropdownMenuItem key={category._id}>
-            <Link href={`/portfolio/${category.slug}`}>{category.name}</Link>
+            <Link href={`/${locale}/portfolio/${category.slug}`}>
+              {category.name}
+            </Link>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
@@ -93,6 +101,9 @@ export const PortfolioDropdown = ({
 export const MainNavigation = () => {
   const currentPath = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
+  const t = useTranslations("navigation");
+  const locale = useLocale();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -119,7 +130,6 @@ export const MainNavigation = () => {
     "h-full text-primary hover:text-primary-foreground flex items-center justify-center px-5 hover:bg-primary transition-colors";
 
   const [user, setUser] = useState<any>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const getUser = async () => {
@@ -131,10 +141,10 @@ export const MainNavigation = () => {
     getUser();
   }, []);
 
-  const handleSignOut = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.refresh();
+  const switchLocale = (newLocale: string) => {
+    const pathWithoutLocale = currentPath.replace(`/${locale}`, "");
+    const newPath = `/${newLocale}${pathWithoutLocale || ""}`;
+    router.push(newPath);
   };
 
   return (
@@ -151,45 +161,76 @@ export const MainNavigation = () => {
           src="/logo_full.jpg"
           alt="logo"
           className="ml-6 cursor-pointer"
-          onClick={() => router.push("/")}
+          onClick={() => router.push(`/${locale}`)}
           width={isScrolled ? 200 : 288}
           height={isScrolled ? 70 : 100}
         />
-        <ul
-          className={`flex gap-0.5 items-center font-semibold ${
-            isScrolled ? "h-16" : "h-20"
-          }`}
-        >
-          <li
-            className={`${
-              currentPath === "/" ? activeClassname : inactiveClassname
+        <div className="flex items-center">
+          <ul
+            className={`flex gap-0.5 items-center font-semibold ${
+              isScrolled ? "h-16" : "h-20"
             }`}
           >
-            <Link href="/">Главная</Link>
-          </li>
-
-          <PortfolioDropdown
-            currentPath={currentPath}
-            activeClassname={activeClassname}
-            inactiveClassname={inactiveClassname}
-          />
-          <li
-            className={`${
-              currentPath === "/contact" ? activeClassname : inactiveClassname
-            }`}
-          >
-            <Link href="/contact">Контакты</Link>
-          </li>
-          {user && user.email === "vadimkbondarchuk@gmail.com" ? (
             <li
               className={`${
-                currentPath === "/admin" ? activeClassname : inactiveClassname
+                currentPath === `/${locale}` || currentPath === `/${locale}/`
+                  ? activeClassname
+                  : inactiveClassname
               }`}
             >
-              <Link href="/admin">Админ</Link>
+              <Link href={`/${locale}`}>{t("home")}</Link>
             </li>
-          ) : null}
-        </ul>
+
+            <PortfolioDropdown
+              currentPath={currentPath}
+              activeClassname={activeClassname}
+              inactiveClassname={inactiveClassname}
+            />
+
+            <li
+              className={`${
+                currentPath.includes("/contact")
+                  ? activeClassname
+                  : inactiveClassname
+              }`}
+            >
+              <Link href={`/${locale}/contact`}>{t("contact")}</Link>
+            </li>
+
+            {user && user.email === "vadimkbondarchuk@gmail.com" ? (
+              <li
+                className={`${
+                  currentPath.includes("/admin")
+                    ? activeClassname
+                    : inactiveClassname
+                }`}
+              >
+                <Link href={`/${locale}/admin`}>Админ</Link>
+              </li>
+            ) : null}
+          </ul>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger className="ml-4 px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">
+              {locale.toUpperCase()}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {locales.map((l) => (
+                <DropdownMenuItem
+                  key={l}
+                  className={l === locale ? "font-bold" : ""}
+                  onClick={() => switchLocale(l)}
+                >
+                  {l === "en"
+                    ? "English"
+                    : l === "uk"
+                    ? "Українська"
+                    : "Русский"}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </nav>
     </div>
   );

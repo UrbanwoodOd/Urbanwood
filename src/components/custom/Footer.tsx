@@ -1,15 +1,18 @@
+"use client";
+
 import { FacebookIcon } from "@/components/icons/Facebook";
 import { InstagramIcon } from "@/components/icons/Instagram";
+import { useTranslations } from "next-intl";
 
 export const Footer = () => {
+  const t = useTranslations("footer");
+
   return (
     <footer className="bg-[#373737] text-muted p-10">
       <div className="container mx-auto px-8">
         <div className="flex flex-col md:flex-row justify-between items-start gap-8 relative">
           <div className="w-full md:w-1/3">
-            <h3 className="text-base font-semibold mb-4">
-              Мы в социальных сетях
-            </h3>
+            <h3 className="text-base font-semibold mb-4">{t("followUs")}</h3>
             <ul className="flex gap-4">
               <li className="hover:text-gray-600 transition-colors">
                 <a
@@ -30,27 +33,30 @@ export const Footer = () => {
             </ul>
           </div>
           <div className="w-full md:w-1/3">
-            <h3 className="text-base font-semibold mb-4">Популярная мебель</h3>
+            <h3 className="text-base font-semibold mb-4">
+              {t("popularFurniture")}
+            </h3>
             <ul className="space-y-2">
               <li className="hover:text-gray-600 text-sm transition-colors">
-                <a href="#">Мебель на заказ в Одессе</a>
+                <a href="#">{t("customFurniture")}</a>
               </li>
               <li className="hover:text-gray-600 text-sm transition-colors">
-                <a href="#">Мебель в стиле Loft</a>
+                <a href="#">{t("loftFurniture")}</a>
               </li>
               <li className="hover:text-gray-600 text-sm transition-colors">
-                <a href="#">Шкафы на заказ в Одессе</a>
+                <a href="#">{t("customWardrobes")}</a>
               </li>
               <li className="hover:text-gray-600 text-sm transition-colors">
-                <a href="#">Классические кухни</a>
+                <a href="#">{t("classicKitchens")}</a>
               </li>
               <li className="hover:text-gray-600 text-sm transition-colors">
-                <a href="#">Столы</a>
+                <a href="#">{t("tables")}</a>
               </li>
             </ul>
           </div>
-          {/* Added this to force second list to move to the left */}
-          <div></div>
+          <div className="w-full md:w-1/3">
+            <p className="text-sm mt-8">{t("copyright")}</p>
+          </div>
         </div>
       </div>
     </footer>

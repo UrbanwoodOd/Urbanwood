@@ -1,8 +1,9 @@
 "use client";
 
-import { Card, CardHeader, CardTitle } from "../ui/card";
-import { useEffect, useState } from "react";
+import axios from "axios";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Card, CardHeader, CardTitle } from "../ui/card";
 
 export const FurnitureCard = ({
   title,
@@ -50,61 +51,30 @@ interface FormattedCategory {
   slug: string;
 }
 
-// Fallback categories if API fails
-const fallbackCategories: FormattedCategory[] = [
-  {
-    title: "Кухни на заказ",
-    imageUrl: "/categories/sofa.jpg",
-    altText: "Кухни на заказ",
-    slug: "kitchens",
-  },
-  {
-    title: "Мебель для кафе, баров, ресторанов",
-    imageUrl: "/categories/sofa.jpg",
-    altText: "Мебель для кафе",
-    slug: "cafe-furniture",
-  },
-  {
-    title: "Мебель лофт",
-    imageUrl: "/categories/sofa.jpg",
-    altText: "Мебель лофт",
-    slug: "loft-furniture",
-  },
-];
-
 export const FurnitureCategoriesList = () => {
   const [categories, setCategories] = useState<FormattedCategory[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('/api/get-category');
-        if (!response.ok) {
-          throw new Error('Failed to fetch categories');
-        }
-        
-        const data = await response.json();
+        const { data } = await axios.get("/api/get-category");
+
         if (data.categories && data.categories.length > 0) {
           // Map the MongoDB categories to the format needed for display
-          const formattedCategories = data.categories.map((category: Category): FormattedCategory => ({
-            title: category.name,
-            imageUrl: category.imagePath || '/categories/sofa.jpg', // Default image if none provided
-            altText: category.description || category.name,
-            slug: category.slug,
-          }));
-          
+          const formattedCategories = data.categories.map(
+            (category: Category): FormattedCategory => ({
+              title: category.name,
+              imageUrl: category.imagePath || "/categories/sofa.jpg", // Default image if none provided
+              altText: category.description || category.name,
+              slug: category.slug,
+            }),
+          );
+
           setCategories(formattedCategories);
-        } else {
-          // Use fallback if no categories found
-          setCategories(fallbackCategories);
         }
       } catch (err) {
-        console.error('Error fetching categories:', err);
-        setError(true);
-        // Use fallback on error
-        setCategories(fallbackCategories);
+        console.error("Error fetching categories:", err);
       } finally {
         setLoading(false);
       }

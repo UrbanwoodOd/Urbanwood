@@ -9,30 +9,44 @@ import {
 } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 export const NavigationBreadcrumbs = () => {
   const currentPath = usePathname();
+  const t = useTranslations('navigation');
+  const locale = useLocale();
 
   const breadcrumbs = currentPath.split("/").filter(Boolean);
+  
+  // Remove locale from breadcrumbs when it's present
+  const filteredBreadcrumbs = breadcrumbs[0] === locale 
+    ? breadcrumbs.slice(1) 
+    : breadcrumbs;
 
-  const formattedBreadcrumbs = breadcrumbs.map((breadcrumb) => {
+  const formattedBreadcrumbs = filteredBreadcrumbs.map((breadcrumb) => {
     switch (breadcrumb) {
       case "contact":
-        return { ref: "/contact", label: "Контакты", redirectable: false };
+        return { ref: `/${locale}/contact`, label: t('contact'), redirectable: false };
       case "portfolio":
-        return { ref: "/portfolio", label: "Портфолио", redirectable: false };
+        return { ref: `/${locale}/portfolio`, label: t('portfolio'), redirectable: false };
       default:
-        if (breadcrumbs.includes("portfolio") && breadcrumb !== "portfolio") {
+        if (filteredBreadcrumbs.includes("portfolio") && breadcrumb !== "portfolio") {
           switch (breadcrumb) {
             case "bedroom":
               return {
-                ref: `/portfolio/${breadcrumb}`,
+                ref: `/${locale}/portfolio/${breadcrumb}`,
                 label: "Спальни",
                 redirectable: true,
               };
+            default:
+              return { 
+                ref: `/${locale}/portfolio/${breadcrumb}`, 
+                label: breadcrumb, 
+                redirectable: true 
+              };
           }
         }
-        return { ref: `/${breadcrumb}`, label: breadcrumb, redirectable: true };
+        return { ref: `/${locale}/${breadcrumb}`, label: breadcrumb, redirectable: true };
     }
   });
 
@@ -41,10 +55,10 @@ export const NavigationBreadcrumbs = () => {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink
-            href="/"
+            href={`/${locale}`}
             className="text-primary-foreground hover:text-white"
           >
-            Главная
+            {t('home')}
           </BreadcrumbLink>
         </BreadcrumbItem>
         {formattedBreadcrumbs.map((breadcrumb, index) => (
@@ -60,21 +74,6 @@ export const NavigationBreadcrumbs = () => {
             </BreadcrumbItem>
           </Fragment>
         ))}
-        {/* <BreadcrumbSeparator className="text-muted" />
-        <BreadcrumbItem>
-          <BreadcrumbLink
-            href="/components"
-            className="text-primary-foreground"
-          >
-            Components
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator className="text-primary-foreground" />
-        <BreadcrumbItem>
-          <BreadcrumbPage className="text-primary-foreground">
-            Breadcrumb
-          </BreadcrumbPage>
-        </BreadcrumbItem> */}
       </BreadcrumbList>
     </Breadcrumb>
   );

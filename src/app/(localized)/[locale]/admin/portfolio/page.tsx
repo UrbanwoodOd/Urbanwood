@@ -7,7 +7,8 @@ import { CategoryList } from "@/components/admin/CategoryList";
 import { MainNavigation } from "@/components/custom/MainNavigation";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/supabase/supabase";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function AdminPortfolioPage() {
@@ -19,6 +20,9 @@ export default function AdminPortfolioPage() {
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const router = useRouter();
+  const params = useParams();
+  const locale = params.locale as string;
+  const t = useTranslations("admin");
 
   useEffect(() => {
     const checkAdmin = async () => {
@@ -31,21 +35,21 @@ export default function AdminPortfolioPage() {
           data.session.user.email !== "vadimkbondarchuk@gmail.com"
         ) {
           // Not logged in or not the admin
-          router.push("/auth/signin");
+          router.push(`/${locale}/auth/signin`);
           return;
         }
 
         setUser(data.session.user);
       } catch (error) {
         console.error("Error checking admin status:", error);
-        router.push("/auth/signin");
+        router.push(`/${locale}/auth/signin`);
       } finally {
         setLoading(false);
       }
     };
 
     checkAdmin();
-  }, [router]);
+  }, [router, locale]);
 
   const handleAddCategory = () => {
     setSelectedCategory(null);
@@ -117,9 +121,9 @@ export default function AdminPortfolioPage() {
           <div>
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold">
-                Элементы категории: {selectedCategory?.name}
+                {t("portfolio.categoryItems")}: {selectedCategory?.name}
               </h2>
-              <Button onClick={handleAddItem}>Добавить элемент</Button>
+              <Button onClick={handleAddItem}>{t("portfolio.addItem")}</Button>
             </div>
             <CategoryItemsList
               categoryId={selectedCategory?._id}
@@ -148,7 +152,7 @@ export default function AdminPortfolioPage() {
       <div className="py-12 px-8">
         <div className="bg-white shadow-md rounded-lg p-6">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold">Управление портфолио</h1>
+            <h1 className="text-2xl font-bold">{t("portfolio.title")}</h1>
             <div className="flex gap-4">
               {activeView !== "list" && (
                 <Button
@@ -164,17 +168,22 @@ export default function AdminPortfolioPage() {
                   }
                 >
                   {activeView === "items"
-                    ? "Назад к категориям"
+                    ? t("portfolio.backToCategories")
                     : activeView === "addItem" || activeView === "editItem"
-                    ? "Назад к элементам"
-                    : "Назад к списку"}
+                    ? t("portfolio.backToItems")
+                    : t("portfolio.backToList")}
                 </Button>
               )}
               {activeView === "list" && (
-                <Button onClick={handleAddCategory}>Добавить категорию</Button>
+                <Button onClick={handleAddCategory}>
+                  {t("portfolio.addCategory")}
+                </Button>
               )}
-              <Button variant="outline" onClick={() => router.push("/admin")}>
-                Назад в админ-панель
+              <Button
+                variant="outline"
+                onClick={() => router.push(`/${locale}/admin`)}
+              >
+                {t("portfolio.backToAdmin")}
               </Button>
             </div>
           </div>

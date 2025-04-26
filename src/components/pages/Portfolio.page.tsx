@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { CategoryItemsList } from "../custom/CategoryItemsList";
+import { useTranslations } from "next-intl";
+
 interface Category {
   _id: string;
   name: string;
@@ -14,6 +16,7 @@ export const PortfolioPage = ({ category }: { category?: string }) => {
   const [categoryData, setCategoryData] = useState<Category | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations('portfolio');
 
   useEffect(() => {
     const fetchCategory = async () => {
@@ -27,16 +30,16 @@ export const PortfolioPage = ({ category }: { category?: string }) => {
 
         if (!response.ok) {
           if (response.status === 404) {
-            throw new Error("Категория не найдена");
+            throw new Error("Category not found");
           }
-          throw new Error("Ошибка при загрузке категории");
+          throw new Error("Error loading category");
         }
 
         const data = await response.json();
         setCategoryData(data.category);
       } catch (err: any) {
         console.error("Error fetching category:", err);
-        setError(err.message || "Ошибка при загрузке категории");
+        setError(err.message || "Error loading category");
       } finally {
         setLoading(false);
       }

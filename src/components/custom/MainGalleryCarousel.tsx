@@ -7,27 +7,33 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
+import { useEffect, useMemo, useState } from "react";
 
-const images = [
-  {
-    src: "/mebel-na-zakaz.jpg",
-    alt: "Image 1",
-    text: "Дизайн, проектирование и изготовление корпусной мебели на заказ",
-  },
-  {
-    src: "/mebel-dlya-kafe-barov-restoranov.jpg",
-    alt: "Image 1",
-    text: "Мебель для кафе, ресторанов, баров",
-  },
-  {
-    src: "/mebel_loft.jpg",
-    alt: "Image 1",
-    text: "Мебель Loft для офиса или дома",
-  },
-];
+const MainGalleryCarousel = () => {
+  const t = useTranslations("carousel");
 
-export const MainGalleryCarousel = () => {
+  const images = useMemo(
+    () => [
+      {
+        src: "/mebel-na-zakaz.jpg",
+        alt: "Image 1",
+        text: t("slide1"),
+      },
+      {
+        src: "/mebel-dlya-kafe-barov-restoranov.jpg",
+        alt: "Image 1",
+        text: t("slide2"),
+      },
+      {
+        src: "/mebel_loft.jpg",
+        alt: "Image 1",
+        text: t("slide3"),
+      },
+    ],
+    [t],
+  );
+
   const [api, setApi] = useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [textTransition, setTextTransition] = useState<
@@ -57,7 +63,7 @@ export const MainGalleryCarousel = () => {
     }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(autoPlayInterval);
-  }, [api]);
+  }, [api, images]);
 
   return (
     <Carousel
@@ -102,3 +108,5 @@ export const MainGalleryCarousel = () => {
     </Carousel>
   );
 };
+
+export { MainGalleryCarousel };
